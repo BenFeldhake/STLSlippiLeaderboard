@@ -7,6 +7,7 @@ import util from 'util';
 import * as settings from '../settings'
 
 import { exec } from 'child_process';
+import { Player } from 'src/lib/player';
 const fs = syncFs.promises;
 const execPromise = util.promisify(exec);
 
@@ -29,8 +30,8 @@ const getSheetData = async (): Promise<string[][]> => {
   return [codes, tags]
 };
 
-const getPlayers = async () => {
-  const sheetData = await getSheetData()
+const getPlayers = async (): Promise<Player[]> => {
+  const sheetData = await getSheetData();
   const codes = sheetData[0];
   const tags = sheetData[1];
   console.log(`Found ${codes.length} player codes`)
