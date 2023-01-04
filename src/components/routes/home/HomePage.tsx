@@ -31,7 +31,7 @@ export default function HomePage() {
   const rankedPlayersOld = sortAndPopulatePlayers(playersOld)
   const oldPlayersMap = new Map(
     rankedPlayersOld.map((p) => [p.connectCode.code, p]));
-  
+
   const players = sortAndPopulatePlayers(playersNew);
   players.forEach((p) => {
     const oldData = oldPlayersMap.get(p.connectCode.code)
@@ -59,7 +59,7 @@ export default function HomePage() {
       <div className="p-1 text-gray-300"> Updated {updateDesc}</div>
       <Table players={players} />
       <div className="p-4 text-gray-300 flex flex-col font-proximaNova">
-        <div>Built by Hufff (Benji) using blorppppp's CO Leaderboard</div>
+        <div>Built by Pants using blorppppp's CO Leaderboard</div>
       </div>
     </div>
   );
