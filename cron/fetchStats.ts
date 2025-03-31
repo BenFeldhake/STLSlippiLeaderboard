@@ -7,33 +7,20 @@ import util from 'util';
 import * as settings from '../settings'
 
 import { exec } from 'child_process';
-import { Player } from 'src/lib/player';
 const fs = syncFs.promises;
 const execPromise = util.promisify(exec);
 
-// var playerCodes = [
-//     "PANTS#0", "LAWN#628", "SAMU#623", "BG#0", "HUNA#300"
-// ];
-
-// var playerTags = [
-//   "Pants", "Lawngarms", "samusown", "BuddyGuysman", "3Huna"
-// ];
-
-const getSheetData = async (): Promise<string[][]> => {
+const getPlayerConnectCodes = async (): Promise<string[]> => {
   const doc = new GoogleSpreadsheet(settings.spreadsheetID);
   await doc.useServiceAccountAuth(creds);
   await doc.loadInfo(); // loads document properties and worksheets
   const sheet = doc.sheetsByIndex[0];
-  const rows = (await sheet.getRows()); // remove header row, changed to 0 from 1
-  const codes = [...new Set(rows.map((r) => r._rawData[1]).filter(r => r !== ''))] as string[]
-  const tags = [...new Set(rows.map((r) => r._rawData[2]).filter(r => r !== ''))] as string[]
-  return [codes, tags]
+  const rows = (await sheet.getRows()).slice(1); // remove header row
+  return [...new Set(rows.map((r) => r._rawData[1]).filter(r => r !== ''))] as string[]
 };
 
-const getPlayers = async (): Promise<Player[]> => {
-  const sheetData = await getSheetData();
-  const codes = sheetData[0];
-  const tags = sheetData[1];
+const getPlayers = async () => {
+  const codes = await getPlayerConnectCodes()
   console.log(`Found ${codes.length} player codes`)
   const allData = codes.map(code => getPlayerDataThrottled(code))
   const results = await Promise.all(allData.map(p => p.catch(e => e)));
@@ -41,12 +28,7 @@ const getPlayers = async (): Promise<Player[]> => {
   const unsortedPlayers = validResults
     .filter((data: any) => data?.data?.getConnectCode?.user)
     .map((data: any) => data.data.getConnectCode.user);
-  // uncomment to print all display names
-  // var displayNames = unsortedPlayers.map(function(player) {
-  //   return player.displayName;
-  // });
-  const unsortedPlayersWithTags = unsortedPlayers.map((obj, i) => ({ ...obj, leaderboardName: tags[i]}))
-  return unsortedPlayersWithTags.sort((p1, p2) =>
+  return unsortedPlayers.sort((p1, p2) =>
     p2.rankedNetplayProfile.ratingOrdinal - p1.rankedNetplayProfile.ratingOrdinal)
 }
 
@@ -68,7 +50,6 @@ async function main() {
   await fs.writeFile(newFile, JSON.stringify(players));
   await fs.writeFile(timestamp, JSON.stringify({updated: Date.now()}));
   console.log('Wrote new data file and timestamp.');
-  console.log('Deploying.');
   const rootDir = path.normalize(path.join(__dirname, '..'))
   console.log(rootDir)
   // if no current git changes
@@ -77,6 +58,7 @@ async function main() {
     console.log('Pending git changes... aborting deploy');
     return
   }
+  console.log('Deploying.');
   const { stdout: stdout2, stderr: stderr2 } = await execPromise(`npm run --prefix ${rootDir} deploy`);
   console.log(stdout2);
   if(stderr2) {
