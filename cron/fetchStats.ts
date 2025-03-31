@@ -32,6 +32,7 @@ const getPlayers = async () => {
     p2.rankedNetplayProfile.ratingOrdinal - p1.rankedNetplayProfile.ratingOrdinal)
 }
 
+
 async function main() {
   console.log('Starting player fetch.');
   const players = await getPlayers();
