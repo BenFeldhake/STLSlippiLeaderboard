@@ -54,19 +54,18 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col items-center h-screen p-8">
-      <img className="h-48" src={ColoradoFlag} alt="colorado flag" />
       <h1 className="text-3xl m-4 text-center text-white">
         {settings.title}
       </h1>
       <div className="p-1 text-gray-300"> Updated {updateDesc}</div>
       <Table players={players} />
       <div className="p-4 text-gray-300 flex flex-col">
-        <div>Built by blorppppp</div>
+        <div>Leaderboard built by blorppppp, STL branch maintained by Pants</div>
         <div>
           <a href="https://www.buymeacoffee.com/blorppppp" target="_blank" rel="noreferrer"
              className="text-gray-400 hover:text-indigo-700 mr-2 hover:underline">
-            Buy me a coffee
-          </a>☕
+            Support blorppppp here
+          </a>
         </div>
       </div>
     </div>
