@@ -19,6 +19,10 @@ const getPlayerConnectCodes = async (): Promise<string[]> => {
   return [...new Set(rows.map((r) => r._rawData[1]).filter(r => r !== ''))] as string[]
 };
 
+// const getPlayerConnectCodes = async (): Promise<string[]> => { 
+// 	return ['JAKE#635','LAWN#528','HUNA#300','TIM#1','DINK#445','MESS#641','HOPS#958','JACK#0','AIMS#205','BADT#478','L#0','GOOB#757','MARX#526','WYCH#204','BIG#910','BAGE#845','JACK#0','FASE#874','CNR#165','SQUI#172','COOK#716','G#6','ANUB#711','PEAC#992','NARD#431','INFP#556','SLAW#342'] };
+
+
 const getPlayers = async () => {
   const codes = await getPlayerConnectCodes()
   console.log(`Found ${codes.length} player codes`)
