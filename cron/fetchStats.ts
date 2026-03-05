@@ -11,7 +11,7 @@ import { exec } from 'child_process';
 const fs = syncFs.promises;
 const execPromise = util.promisify(exec);
 
-const getPlayerConnectCodes = async (): Promise<string[]> => {
+const getPlayerConnectCodes = async (): Promise<string[][]> => {
    const serviceAccountAuth = new JWT({
     email: creds.client_email,
     key: creds.private_key,
@@ -21,11 +21,15 @@ const getPlayerConnectCodes = async (): Promise<string[]> => {
   await doc.loadInfo(); // loads document properties and worksheets
   const sheet = doc.sheetsByIndex[0];
   const rows = (await sheet.getRows()).slice(1); // remove header row
-  return [...new Set(rows.map((r) => (r as any)._rawData[1]).filter(r => r !== ''))] as string[];
+  const codes = [...new Set(rows.map((r) => (r as any)._rawData[1]).filter(r => r !== ''))] as string[]
+  const tags = [...new Set(rows.map((r) => (r as any)._rawData[2]).filter(r => r !== ''))] as string[]
+  return [codes, tags];
 };
 
 const getPlayers = async () => {
-  const codes = await getPlayerConnectCodes()
+  const sheetData = await getPlayerConnectCodes();
+  const codes = sheetData[0];
+  const tags = sheetData[1];
   console.log(`Found ${codes.length} player codes`)
   const allData = codes.map(code => getPlayerDataThrottled(code))
   const results = await Promise.all(allData.map(p => p.catch(e => e)));
@@ -33,7 +37,8 @@ const getPlayers = async () => {
   const unsortedPlayers = validResults
     .filter((data: any) => data.data.getUser)
     .map((data: any) => data.data.getUser);
-  return unsortedPlayers.sort((p1, p2) =>
+  const unsortedPlayersWithTags = unsortedPlayers.map((obj, i) => ({ ...obj, leaderboardName: tags[i]}))
+  return unsortedPlayersWithTags.sort((p1, p2) =>
     p2.rankedNetplayProfile.ratingOrdinal - p1.rankedNetplayProfile.ratingOrdinal)
 }
 
