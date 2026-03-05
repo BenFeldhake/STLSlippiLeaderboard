@@ -1,7 +1,7 @@
 {
   "outDir": "./dist/",
   "plugins": [],
-  "include": ["./"],
+  "include": ["./**/*"],
   "exclude": ["dist"],
 
   "compilerOptions": {
@@ -9,13 +9,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "sourceMap": true,
     "noEmitOnError": true,
     "types": ["node"],
-    "typeRoots": ["./node_modules/@types", "./types"],
-    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./types", "./src/typings"],
     "resolveJsonModule": true,
-    "downlevelIteration": true
   }
 }

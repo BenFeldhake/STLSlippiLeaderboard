@@ -1,5 +1,6 @@
 import { getPlayerDataThrottled } from './slippi'
 import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { GoogleAuth, JWT } from 'google-auth-library';
 import creds from '../secrets/creds.json';
 import * as syncFs from 'fs';
 import * as path from 'path';
@@ -11,12 +12,16 @@ const fs = syncFs.promises;
 const execPromise = util.promisify(exec);
 
 const getPlayerConnectCodes = async (): Promise<string[]> => {
-  const doc = new GoogleSpreadsheet(settings.spreadsheetID);
-  await doc.useServiceAccountAuth(creds);
+   const serviceAccountAuth = new JWT({
+    email: creds.client_email,
+    key: creds.private_key,
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
+  const doc = new GoogleSpreadsheet(settings.spreadsheetID, serviceAccountAuth);
   await doc.loadInfo(); // loads document properties and worksheets
   const sheet = doc.sheetsByIndex[0];
   const rows = (await sheet.getRows()).slice(1); // remove header row
-  return [...new Set(rows.map((r) => r._rawData[1]).filter(r => r !== ''))] as string[]
+  return [...new Set(rows.map((r) => (r as any)._rawData[1]).filter(r => r !== ''))] as string[];
 };
 
 const getPlayers = async () => {
@@ -26,11 +31,12 @@ const getPlayers = async () => {
   const results = await Promise.all(allData.map(p => p.catch(e => e)));
   const validResults = results.filter(result => !(result instanceof Error));
   const unsortedPlayers = validResults
-    .filter((data: any) => data?.data?.getConnectCode?.user)
-    .map((data: any) => data.data.getConnectCode.user);
+    .filter((data: any) => data.data.getUser)
+    .map((data: any) => data.data.getUser);
   return unsortedPlayers.sort((p1, p2) =>
     p2.rankedNetplayProfile.ratingOrdinal - p1.rankedNetplayProfile.ratingOrdinal)
 }
+
 
 async function main() {
   console.log('Starting player fetch.');
@@ -53,13 +59,13 @@ async function main() {
   const rootDir = path.normalize(path.join(__dirname, '..'))
   console.log(rootDir)
   // if no current git changes
-  const { stdout, stderr } = await execPromise(`git -C ${rootDir} status --porcelain`);
+  const { stdout, stderr } = await execPromise(`git -C "${rootDir}" status --porcelain`);
   if(stdout || stderr) {
     console.log('Pending git changes... aborting deploy');
     return
   }
   console.log('Deploying.');
-  const { stdout: stdout2, stderr: stderr2 } = await execPromise(`npm run --prefix ${rootDir} deploy`);
+  const { stdout: stdout2, stderr: stderr2 } = await execPromise(`npm run --prefix "${rootDir}" deploy`);
   console.log(stdout2);
   if(stderr2) {
     console.error(stderr2);

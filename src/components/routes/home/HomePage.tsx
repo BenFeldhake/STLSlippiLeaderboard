@@ -27,11 +27,13 @@ const sortAndPopulatePlayers = (players: Player[]) => {
 }
 
 export default function HomePage() {
+  console.log(playersNew);
+  console.log(playersOld);
 
   const rankedPlayersOld = sortAndPopulatePlayers(playersOld)
   const oldPlayersMap = new Map(
     rankedPlayersOld.map((p) => [p.connectCode.code, p]));
-
+  
   const players = sortAndPopulatePlayers(playersNew);
   players.forEach((p) => {
     const oldData = oldPlayersMap.get(p.connectCode.code)
@@ -52,14 +54,20 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center h-screen p-8 font-proximaNova">
-      <h1 className="text-3xl m-4 text-center text-white font-proximaNova">
-        <b>{settings.title}</b>
+    <div className="flex flex-col items-center h-screen p-8">
+      <h1 className="text-3xl m-4 text-center text-white">
+        {settings.title}
       </h1>
       <div className="p-1 text-gray-300"> Updated {updateDesc}</div>
       <Table players={players} />
-      <div className="p-4 text-gray-300 flex flex-col font-proximaNova">
-        <div>Built by Pants using blorppppp's CO Leaderboard</div>
+      <div className="p-4 text-gray-300 flex flex-col">
+        <div>Built by blorppppp, maintained by Pants</div>
+        <div>
+          <a href="https://www.buymeacoffee.com/blorppppp" target="_blank" rel="noreferrer"
+             className="text-gray-400 hover:text-indigo-700 mr-2 hover:underline">
+            Buy blorpppp a coffee
+          </a>☕
+        </div>
       </div>
     </div>
   );
