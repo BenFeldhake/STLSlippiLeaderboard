@@ -1,7 +1,7 @@
 {
-  "name": "react-pages-boilerplate",
+  "name": "stlslippileaderboard",
   "version": "1.0.0",
-  "description": "Simple boilerplate for working with React, redux, react-router and Github Pages",
+  "description": "Slippi leaderboard for the STL Melee area",
   "private": "true",
   "main": "index.js",
   "scripts": {
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rtivital/react-pages-boilerplate.git"
+    "url": "git+https://github.com/BenFeldhake/STLSlippiLeaderboard.git"
   },
-  "author": "Vitaly Rtishchev <rtivital@gmail.com> (http://github.com/rtivital)",
+  "author": "Ben Feldhake <benf117@gmail.com> (http://github.com/benfeldhake)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rtivital/react-pages-boilerplate/issues"
+    "url": "https://github.com/BenFeldhake/STLSlippiLeaderboard/issues"
   },
   "homepage": "https://benfeldhake.github.io/STLSlippiLeaderboard/",
   "dependencies": {
@@ -26,7 +26,8 @@
     "classnames": "^2.3.1",
     "css-loader": "^6.7.3",
     "dayjs": "^1.11.7",
-    "google-spreadsheet": "^3.3.0",
+    "google-auth-library": "^10.6.1",
+    "google-spreadsheet": "^5.2.0",
     "limiter": "^2.1.0",
     "null-loader": "^4.0.1",
     "open-color": "^1.8.0",
@@ -35,10 +36,10 @@
     "postcss-preset-env": "^7.8.3",
     "process": "^0.11.10",
     "prop-types": "^15.7.2",
-    "react": "^18",
-    "react-circular-progressbar": "^2.1.0",
-    "react-dom": "^17.0.2",
-    "react-jss": "^10.7.1",
+    "react": "^19.2.4",
+    "react-circular-progressbar": "^2.2.0",
+    "react-dom": "^19.2.4",
+    "react-jss": "^10.9.2",
     "react-responsive": "^9.0.2",
     "react-router-dom": "^5.2.0",
     "react-tooltip": "^5.1.3",
@@ -46,19 +47,16 @@
     "stream-http": "^3.2.0",
     "style-loader": "^3.3.1",
     "tabletop": "^1.6.2",
-    "tailwindcss": "^3.2.4",
+    "tailwindcss": "^4.2.1",
     "ts-loader": "^9.4.2",
-    "ts-node": "^10.9.1",
-    "webpack-bundle-analyzer": "^4.4.2",
-    "yarn": "^1.22.19"
+    "webpack-bundle-analyzer": "^4.4.2"
   },
   "devDependencies": {
-    "@types/react": "^17.0.15",
-    "@types/react-dom": "^17.0.9",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "@types/react-router-dom": "^5.1.8",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "assert": "^2.0.0",
     "chalk": "^4.1.2",
     "cname-webpack-plugin": "^3.0.0",
@@ -73,19 +71,20 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
-    "gh-pages": "^3.2.3",
-    "git-repo-name": "^1.0.1",
+    "gh-pages": "^6.3.0",
+    "git-repo-name": "^0.2.0",
     "html-webpack-plugin": "^5",
     "identity-obj-proxy": "^3.0.0",
     "open-browser-webpack-plugin": "^0.0.5",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
     "sass": "^1.56.2",
-    "terser-webpack-plugin": "^4.1.0",
+    "terser-webpack-plugin": "^5.3.17",
+    "tsx": "^4.21.0",
     "typescript": "^4.3.5",
     "util": "^0.12.5",
-    "webpack": "^5.75.0",
+    "webpack": "^5",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^4.11.1"
+    "webpack-dev-server": "^5.2.3"
   }
 }
